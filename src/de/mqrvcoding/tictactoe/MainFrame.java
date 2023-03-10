@@ -12,10 +12,10 @@ import java.io.IOException;
 public class MainFrame extends JFrame {
 
     private char player = 'x';
-    private int winsX = 0, winsO = 0;
+    private int winsX = 0, winsO = 0, draw;
 
     private final JButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
-    private final JLabel lblWinsX, lblWinsO;
+    private final JLabel lblWinsX, lblWinsO, lblDraw;
 
     public static void main(String[] args) {
         try {
@@ -37,6 +37,7 @@ public class MainFrame extends JFrame {
         setTitle("Tic-Tac-Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(550, 400);
+        setResizable(false);
 
         try {
             setIconImage(ImageIO.read(new File("." + File.separator + "res" + File.separator + "icon.png")));
@@ -100,7 +101,7 @@ public class MainFrame extends JFrame {
         //endregion
 
         //region Create JPanel with Stats
-        JPanel pnlStats = new JPanel(new MigLayout("", "[grow]", "[grow][grow]"));
+        JPanel pnlStats = new JPanel(new MigLayout("", "[grow]", "[grow][grow][grow]"));
         pnlStats.setSize(150, 400);
         contentPane.add(pnlStats, "grow");
 
@@ -108,6 +109,8 @@ public class MainFrame extends JFrame {
         pnlStats.add(lblWinsX, "cell 0 0, center");
         lblWinsO = new JLabel("O: " + winsO);
         pnlStats.add(lblWinsO, "cell 0 1, center");
+        lblDraw = new JLabel("Draw: " + draw);
+        pnlStats.add(lblDraw, "cell 0 2, center");
         //endregion
     }
 
@@ -162,10 +165,14 @@ public class MainFrame extends JFrame {
 
             if (playerWon()) {
                 JOptionPane.showMessageDialog(null, "Player X won!");
-                setButtonsEnabled(true);
-                clearButtons();
+                resetButtons();
                 winsX++;
                 lblWinsX.setText("X: " + winsX);
+            } else if (isDraw()) {
+                JOptionPane.showMessageDialog(null, "It's a draw!");
+                resetButtons();
+                draw++;
+                lblDraw.setText("Draw: " + draw);
             }
             player = 'o';
         } else {
@@ -218,10 +225,14 @@ public class MainFrame extends JFrame {
 
             if (playerWon()) {
                 JOptionPane.showMessageDialog(null, "Player O won!");
-                setButtonsEnabled(true);
-                clearButtons();
+                resetButtons();
                 winsO++;
                 lblWinsO.setText("O: " + winsO);
+            } else if (isDraw()) {
+                JOptionPane.showMessageDialog(null, "It's a draw!");
+                resetButtons();
+                draw++;
+                lblDraw.setText("Draw: " + draw);
             }
             player = 'x';
         }
@@ -263,19 +274,23 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void setButtonsEnabled(boolean e) {
-        btn1.setEnabled(e);
-        btn2.setEnabled(e);
-        btn3.setEnabled(e);
-        btn4.setEnabled(e);
-        btn5.setEnabled(e);
-        btn6.setEnabled(e);
-        btn7.setEnabled(e);
-        btn8.setEnabled(e);
-        btn9.setEnabled(e);
+    private boolean isDraw() {
+        return !btn1.isEnabled() && !btn2.isEnabled() && !btn3.isEnabled()
+                && !btn4.isEnabled() && !btn5.isEnabled() && !btn6.isEnabled()
+                && !btn7.isEnabled() && !btn8.isEnabled() && !btn9.isEnabled();
     }
 
-    private void clearButtons() {
+    private void resetButtons() {
+        btn1.setEnabled(true);
+        btn2.setEnabled(true);
+        btn3.setEnabled(true);
+        btn4.setEnabled(true);
+        btn5.setEnabled(true);
+        btn6.setEnabled(true);
+        btn7.setEnabled(true);
+        btn8.setEnabled(true);
+        btn9.setEnabled(true);
+
         btn1.setText("");
         btn2.setText("");
         btn3.setText("");
